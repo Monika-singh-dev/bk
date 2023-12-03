@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+form{
+  border: 1px solid black;
+  background-color: aqua;
+  border-radius: 20px;
+  margin: 80px 100px 1px 100px;
+  padding-bottom: 10px;
+  font-family: serif;
+  
+}
