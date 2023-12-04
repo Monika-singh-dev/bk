@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { addCategoryDB, db, objName } from "../../Firebase/SDK";
+import { addBookmarkDB, addCategoryDB, db, objName } from "../../Firebase/SDK";
 import { onValue, ref } from "firebase/database";
 
 export const AppStore = createContext();
@@ -16,7 +16,7 @@ export const StoreProvider = ({ children }) => {
   // console.log(categories);
   const addBookmark = (value) => {
     // const id = addBookmarkDB(value);
-    addCategoryDB(value);
+    addBookmarkDB(value);
     // setItems([...items, { id, ...value }]);
   };
 
@@ -26,6 +26,10 @@ export const StoreProvider = ({ children }) => {
   useEffect(() => {
     onValue(ref(db, objName), (snapshot) => {
       const data = snapshot.val();
+      if (!data) {
+        setItems([]);
+        return;
+      }
       const dataArr = Object.keys(data).map((key) => ({
         ...data[key],
         id: key,
