@@ -7,6 +7,8 @@ import {
   Input,
   List,
   ListItem,
+  Text,
+  Link,
   Spacer,
 } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
@@ -16,13 +18,29 @@ import {
   removeBookmarkDB,
   removeCategoryDB,
   renameCategoryDB,
+  renameBookmarkDB,
 } from "../Firebase/SDK";
 import { IoMdDoneAll } from "react-icons/io";
 
 const CardBox = ({ item }) => {
   const [bookmarks, setBookmarks] = useState([]);
-  const [ctName, setCtName] = useState("");
+  const [ctName, setCtName] = useState(item.name);
   const [isEdit, setIsEdit] = useState(false);
+
+  const removeBookmark = (id) => {
+    removeBookmarkDB({ cID: item.id, bID: id });
+  };
+
+  const removeCategory = () => {
+    if (
+      window.confirm(
+        `Do you want to delete ${item.name} category! All bookmarks of this category will be deleted.`
+      ) !== true
+    )
+      return;
+
+    removeCategoryDB(item.id);
+  };
 
   useEffect(() => {
     if (!item.bookmarks) return;
@@ -35,16 +53,13 @@ const CardBox = ({ item }) => {
     setBookmarks(dataArr);
   }, [item]);
 
-  if (!item.bookmarks) return;
-
-  const removeBookmark = (id) => {
-    removeBookmarkDB({ cID: item.id, bID: id });
-  };
-
-  const renameCategory = (id) => {
+  const renameCategory = () => {
     renameCategoryDB(item.id, ctName);
+
     setIsEdit(false);
   };
+
+  if (!item.bookmarks) return;
 
   return (
     <Card m={"2"} rounded={4} overflow={"hidden"} minW={300} maxW={350}>
@@ -64,26 +79,30 @@ const CardBox = ({ item }) => {
             placeholder="Please type new name!"
           />
         ) : (
-          <Heading size="sm">{item.name}</Heading>
+          <Heading size={"sm"} ml={1}>
+            {item.name}
+          </Heading>
         )}
 
         <Box display={"flex"} alignItems={"center"}>
           {isEdit ? (
-            <Box mr={2} ml={2} cursor={"pointer"} fontSize={"18px"}>
-              <IoMdDoneAll onClick={renameCategory} />
-            </Box>
+            <IoMdDoneAll
+              style={{
+                marginLeft: "10px",
+                marginRight: "8px",
+                color: "#f46a31",
+              }}
+              fontSize={"20px"}
+              onClick={renameCategory}
+            />
           ) : (
             <>
-              <CiEdit
-                fontSize={"22px"}
-                onClick={() => {
-                  setIsEdit(true);
-                  setCtName(item.name);
-                }}
+              <CiEdit fontSize={"22px"} onClick={() => setIsEdit(true)} />
+              <MdDelete
+                style={{ marginLeft: "5px", color: "#f46a31" }}
+                fontSize={"20px"}
+                onClick={removeCategory}
               />
-              <Box mr={2} ml={2} cursor={"pointer"} fontSize={"18px"}>
-                <MdDelete onClick={() => removeCategoryDB(item.id)} />
-              </Box>
             </>
           )}
         </Box>
@@ -94,6 +113,7 @@ const CardBox = ({ item }) => {
           {bookmarks.map((bookmark, i) => (
             <SingleBookmark
               key={i}
+              categoryId={item.id}
               bookmark={bookmark}
               removeBookmark={removeBookmark}
             />
@@ -104,7 +124,11 @@ const CardBox = ({ item }) => {
   );
 };
 
-const SingleBookmark = ({ bookmark, removeBookmark }) => {
+const SingleBookmark = ({ categoryId, bookmark, removeBookmark }) => {
+  const renameBookmark = () => {
+    renameBookmarkDB(categoryId, bookmark.id, "");
+  };
+
   return (
     <ListItem
       style={{
@@ -115,11 +139,22 @@ const SingleBookmark = ({ bookmark, removeBookmark }) => {
       display={"flex"}
       alignItems={"center"}
     >
-      <Box w={"12px"} mr={2} ml={2} mt={0.5}>
-        <img src={bookmark.icon} alt="icon" height={"100%"} width={"100%"} />
-      </Box>
-      {bookmark.title}
-      <Spacer />
+      <Link
+        href={bookmark.url}
+        isExternal
+        flex={1}
+        display={"flex"}
+        alignItems={"center"}
+        style={{ textDecoration: "none" }}
+      >
+        <Box w={"12px"} mr={2} ml={2} mt={0.5}>
+          <img src={bookmark.icon} alt="icon" height={"100%"} width={"100%"} />
+        </Box>
+        <Text fontSize={"sm"}>{bookmark.title}</Text>
+        <Spacer />
+      </Link>
+
+      <CiEdit fontSize={"18px"}/>
       <Box
         mr={2}
         ml={2}

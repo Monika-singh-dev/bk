@@ -1,5 +1,10 @@
 import { initializeApp } from "firebase/app";
 import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import {
   child,
   getDatabase,
   push,
@@ -19,7 +24,44 @@ const firebaseConfig = {
   databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
+
+export const signUp = (email, password) =>
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return user;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log({
+        code: errorCode,
+        message: errorMessage,
+      });
+
+      return null;
+    });
+
+export const signIn = (email, password) =>
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return user;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log({
+        code: errorCode,
+        message: errorMessage,
+      });
+
+      return null;
+    });
 
 export const db = getDatabase(app);
 
@@ -34,6 +76,7 @@ export function addCategoryDB(value) {
 
   return id;
 }
+
 export function addBookmarkDB(item) {
   const id = push(child(ref(db), `${objName}/${item.categoryId}`)).key;
 
@@ -61,5 +104,13 @@ export function renameCategoryDB(id, newName) {
     name: newName,
   }).catch((error) => {
     console.log("Error in rename category - ", error);
+  });
+}
+
+export function renameBookmarkDB(cId, bId, newName) {
+  update(ref(db, `${objName}/${cId}/bookmarks/${bId}`), {
+    title: newName,
+  }).catch((error) => {
+    console.log("Error in rename bookmark - ", error);
   });
 }

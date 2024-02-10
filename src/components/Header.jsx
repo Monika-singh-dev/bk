@@ -1,10 +1,16 @@
 import { Avatar, Box, Button, Flex, Heading, WrapItem } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Appactions } from "./context/Actionprovider";
-// import Action from "./Action";
+import { AppStore } from "./context/Storeprovider";
 
 const Header = () => {
   const { bmModelHandler } = useContext(Appactions);
+  const { handleUser } = useContext(AppStore);
+
+  const handleLogOut = () => {
+    handleUser(null);
+  };
+
   return (
     <Flex
       justifyContent="space-between"
@@ -29,7 +35,20 @@ const Header = () => {
         </Button>
 
         <WrapItem cursor={"pointer"}>
-          <Avatar name="Monika singh" bg="LightGray" />
+          <Button
+            variant={"outline"}
+            color={"black"}
+            bg={"white"}
+            onClick={handleLogOut}
+          >
+            Log Out
+          </Button>
+          {/* <Avatar
+            name="Monika Singh"
+            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+            bg="green"
+            border={"2px solid black"}
+          /> */}
         </WrapItem>
       </Box>
     </Flex>

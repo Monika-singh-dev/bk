@@ -6,7 +6,14 @@ export const AppStore = createContext();
 
 export const StoreProvider = ({ children }) => {
   const [items, setItems] = useState([]);
+  const [user, setUser] = useState(null);
   // const [categories, setCategories] = useState([]);
+
+  const handleUser = (user) => {
+    setUser(user);
+    localStorage.setItem("bookmarkUser", null);
+    window.location.reload();
+  };
 
   const addcategory = (value) => {
     addCategoryDB(value);
@@ -23,6 +30,15 @@ export const StoreProvider = ({ children }) => {
   // const addItems = (value) => {
   //   setItems([...items, value]);
   // };
+
+  useEffect(() => {
+    const user = localStorage.getItem("bookmarkUser");
+
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  }, []);
+
   useEffect(() => {
     onValue(ref(db, objName), (snapshot) => {
       const data = snapshot.val();
@@ -39,7 +55,9 @@ export const StoreProvider = ({ children }) => {
   }, []);
 
   return (
-    <AppStore.Provider value={{ items, addBookmark, addcategory }}>
+    <AppStore.Provider
+      value={{ items, addBookmark, addcategory, user, handleUser }}
+    >
       {children}
     </AppStore.Provider>
   );

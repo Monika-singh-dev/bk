@@ -11,17 +11,14 @@ import {
   Select,
   Spacer,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AppStore } from "../context/Storeprovider";
 import { Appactions } from "../context/Actionprovider";
 
 function Bookmarkmodel() {
   const { isBmOpen, bmModelHandler, cmModelHandler } = useContext(Appactions);
   const { addBookmark, items } = useContext(AppStore);
-  console.log(items);
-  const [icon] = useState(
-    "https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
-  );
+  const [icon, setIcon] = useState("");
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [selectedCategory, setSelectedCategory] = useState({
@@ -34,6 +31,42 @@ function Bookmarkmodel() {
       alert("Please provide all fields!");
       return;
     }
+
+    var inp = url;
+    var http = url.search("https://");
+
+    if (http == "-1") {
+      inp = "https://" + url;
+    }
+
+    var regexp =
+      /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i;
+
+    if (regexp.test(inp)) {
+      var urlData = new URL(inp);
+      var domain = urlData.origin;
+
+      setUrl(urlData.href);
+      let imageUrl = `${domain}/favicon.ico`;
+
+      function imageExists(url) {
+        var img = new Image();
+        img.onload = function () {
+          setIcon(imageUrl);
+        };
+        img.onerror = function () {
+          setIcon(`http://www.google.com/s2/favicons?domain=${domain}`);
+        };
+        img.src = url;
+      }
+      imageExists(imageUrl);
+    } else {
+      alert("Url is invalid!");
+    }
+  };
+
+  useEffect(() => {
+    if (!icon) return;
 
     const newItem = {
       title,
@@ -48,7 +81,7 @@ function Bookmarkmodel() {
     setTitle("");
     setSelectedCategory("");
     bmModelHandler();
-  };
+  }, [icon]);
 
   return (
     <>
