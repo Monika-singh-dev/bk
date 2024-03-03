@@ -8,6 +8,7 @@ const Header = () => {
   const { handleUser } = useContext(AppStore);
 
   const handleLogOut = () => {
+    if (window.confirm(`Do you want to logout?`) !== true) return;
     handleUser(null);
   };
 

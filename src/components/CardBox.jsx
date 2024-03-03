@@ -22,13 +22,13 @@ import {
 } from "../Firebase/SDK";
 import { IoMdDoneAll } from "react-icons/io";
 
-const CardBox = ({ item }) => {
+const CardBox = ({ item, user }) => {
   const [bookmarks, setBookmarks] = useState([]);
   const [ctName, setCtName] = useState(item.name);
   const [isEdit, setIsEdit] = useState(false);
 
   const removeBookmark = (id) => {
-    removeBookmarkDB({ cID: item.id, bID: id });
+    removeBookmarkDB({ uid: user.uid, cID: item.id, bID: id });
   };
 
   const removeCategory = () => {
@@ -39,7 +39,8 @@ const CardBox = ({ item }) => {
     )
       return;
 
-    removeCategoryDB(item.id);
+    removeCategoryDB(user.uid, item.id);
+    // console.log(item.id);
   };
 
   useEffect(() => {
@@ -51,10 +52,10 @@ const CardBox = ({ item }) => {
     }));
 
     setBookmarks(dataArr);
-  }, [item]);
+  }, []);
 
   const renameCategory = () => {
-    renameCategoryDB(item.id, ctName);
+    renameCategoryDB(user.uid, item.id, ctName);
 
     setIsEdit(false);
   };
@@ -154,7 +155,7 @@ const SingleBookmark = ({ categoryId, bookmark, removeBookmark }) => {
         <Spacer />
       </Link>
 
-      <CiEdit fontSize={"18px"}/>
+      <CiEdit fontSize={"18px"} />
       <Box
         mr={2}
         ml={2}

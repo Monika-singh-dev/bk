@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 // import { Link } from 'react-router-dom'
-import { Button, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { AppStore } from "./context/Storeprovider";
 import Header from "./Header";
 import CardBox from "./CardBox";
@@ -21,7 +21,7 @@ const Homepage = () => {
       <Header />
       <Flex flexWrap={"wrap"}>
         {items.map((item, i) => (
-          <CardBox key={i} item={item} />
+          <CardBox key={i} item={item} user={user} />
         ))}
       </Flex>
     </div>

@@ -4,7 +4,6 @@ import { ChakraProvider, Flex } from "@chakra-ui/react";
 import Homepage from "./components/Homepage";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-
 import Bookmarkmodel from "./components/Models/Bookmarkmodel";
 import Categorymodel from "./components/Models/Categorymodel";
 

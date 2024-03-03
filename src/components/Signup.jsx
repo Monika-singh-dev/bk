@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { signUp } from "../Firebase/SDK";
+import { useNavigate } from "react-router-dom";
+import { addUserDB, signUp } from "../Firebase/SDK";
 import { AppStore } from "./context/Storeprovider";
+import { Button, Input, Link } from "@chakra-ui/react";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -42,6 +43,9 @@ const Signup = () => {
     // create new entity
 
     localStorage.setItem("bookmarkUser", JSON.stringify(user));
+
+    await addUserDB(user.uid, user.email);
+
     navigate("/");
 
     setData({ username: "", email: "", password: "", confirm: "" });
@@ -55,53 +59,72 @@ const Signup = () => {
   return (
     <div>
       <form onSubmit={submithandle}>
-        <h2>Signup</h2>
+        <h2>Signup Form</h2>
         <div>
           <label>Username:</label>
           <br />
-          <input
+          <Input
             type="text"
             value={data.username}
             onChange={userhandle}
             name="username"
+            variant="flushed"
           />
         </div>
         <div>
           <label>E-mail:</label>
           <br />
-          <input
+          <Input
             type="email"
             value={data.email}
             onChange={userhandle}
             name="email"
+            variant="flushed"
           />
         </div>
         <div>
           <label>Password:</label>
           <br />
-          <input
+          <Input
             type="password"
             value={data.password}
             onChange={userhandle}
             name="password"
+            variant="flushed"
           />
         </div>
         <div>
           <label>Confirm Password:</label>
           <br />
-          <input
+          <Input
             type="password"
             value={data.confirm}
             onChange={userhandle}
             name="confirm"
+            variant="flushed"
           />
         </div>
         <br />
-        <input type="submit" value="signup" />
+        <Button
+          size="md"
+          height="40px"
+          width="100px"
+          border="2px"
+          borderColor="green.500"
+          type="submit"
+        >
+          Sign up
+        </Button>
         <p>
-          if you have an accountthen <Link to={"/login"}>Login</Link>
+          if you have already an account then{" "}
+          <Link color="teal.500" href="/login">
+            Login
+          </Link>
         </p>
-        or back to<Link to={"/"}>Homepage</Link>
+        or back to
+        <Link color="teal.500" href="/">
+          Homepage
+        </Link>
       </form>
     </div>
   );

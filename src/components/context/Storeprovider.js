@@ -16,14 +16,14 @@ export const StoreProvider = ({ children }) => {
   };
 
   const addcategory = (value) => {
-    addCategoryDB(value);
+    addCategoryDB(user.uid, value);
     // setCategories([...categories, { id, name: value }]);
   };
 
   // console.log(categories);
   const addBookmark = (value) => {
     // const id = addBookmarkDB(value);
-    addBookmarkDB(value);
+    addBookmarkDB(user.uid, value);
     // setItems([...items, { id, ...value }]);
   };
 
@@ -40,19 +40,22 @@ export const StoreProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    onValue(ref(db, objName), (snapshot) => {
-      const data = snapshot.val();
-      if (!data) {
-        setItems([]);
-        return;
-      }
-      const dataArr = Object.keys(data).map((key) => ({
-        ...data[key],
-        id: key,
-      }));
-      setItems(dataArr);
-    });
-  }, []);
+    if (user) {
+      console.log("object");
+      onValue(ref(db, `${user.uid}/${objName}`), (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          setItems([]);
+          return;
+        }
+        const dataArr = Object.keys(data).map((key) => ({
+          ...data[key],
+          id: key,
+        }));
+        setItems(dataArr);
+      });
+    }
+  }, [user]);
 
   return (
     <AppStore.Provider

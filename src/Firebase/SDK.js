@@ -67,48 +67,56 @@ export const db = getDatabase(app);
 
 export const objName = "categories";
 
-export function addCategoryDB(value) {
+export async function addUserDB(uid, email) {
+  await set(ref(db, uid), {
+    email: email,
+  });
+}
+
+export function addCategoryDB(uid, value) {
   const id = push(child(ref(db), objName)).key;
 
-  set(ref(db, `${objName}/${id}`), {
+  set(ref(db, `${uid}/${objName}/${id}`), {
     name: value,
   });
 
   return id;
 }
 
-export function addBookmarkDB(item) {
-  const id = push(child(ref(db), `${objName}/${item.categoryId}`)).key;
+export function addBookmarkDB(uid, item) {
+  const id = push(child(ref(db), `${uid}/${objName}/${item.categoryId}`)).key;
 
   const updates = {};
-  updates[`${objName}/${item.categoryId}/bookmarks/${id}`] = item;
+  updates[`${uid}/${objName}/${item.categoryId}/bookmarks/${id}`] = item;
   update(ref(db), updates);
 
   return id;
 }
 
-export function removeBookmarkDB({ cID, bID }) {
-  remove(ref(db, `${objName}/${cID}/bookmarks/${bID}`)).catch((error) => {
-    console.log("Error in deleting bookmark - ", error);
-  });
+export function removeBookmarkDB({ uid, cID, bID }) {
+  remove(ref(db, `${uid}/${objName}/${cID}/bookmarks/${bID}`)).catch(
+    (error) => {
+      console.log("Error in deleting bookmark - ", error);
+    }
+  );
 }
 
-export function removeCategoryDB(id) {
-  remove(ref(db, `${objName}/${id}`)).catch((error) => {
+export function removeCategoryDB(uid, id) {
+  remove(ref(db, `${uid}/${objName}/${id}`)).catch((error) => {
     console.log("Error in deleting category - ", error);
   });
 }
 
-export function renameCategoryDB(id, newName) {
-  update(ref(db, `${objName}/${id}`), {
+export function renameCategoryDB(uid, id, newName) {
+  update(ref(db, `${uid}/${objName}/${id}`), {
     name: newName,
   }).catch((error) => {
     console.log("Error in rename category - ", error);
   });
 }
 
-export function renameBookmarkDB(cId, bId, newName) {
-  update(ref(db, `${objName}/${cId}/bookmarks/${bId}`), {
+export function renameBookmarkDB(uid, cId, bId, newName) {
+  update(ref(db, `${uid}/${objName}/${cId}/bookmarks/${bId}`), {
     title: newName,
   }).catch((error) => {
     console.log("Error in rename bookmark - ", error);
