@@ -36,15 +36,5 @@
     transform: rotate(360deg);
   }
 }
-form{
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  height: 100%;
-  padding-top: 100px;
-  padding-bottom: 68px;
-  background-image:url(https://images.unsplash.com/photo-1590228947498-a2a86df7b19d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
-}
+
+

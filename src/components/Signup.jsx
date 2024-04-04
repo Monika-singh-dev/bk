@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { addUserDB, signUp } from "../Firebase/SDK";
 import { AppStore } from "./context/Storeprovider";
 import { Button, Input, Link } from "@chakra-ui/react";
-
+import "./forms.css";
 const Signup = () => {
   const navigate = useNavigate();
   const { user, handleUser } = useContext(AppStore);
@@ -51,81 +51,67 @@ const Signup = () => {
     setData({ username: "", email: "", password: "", confirm: "" });
   };
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/");
+  //   }
+  // }, [user]);
   return (
-    <div>
-      <form onSubmit={submithandle}>
-        <h2>Signup Form</h2>
-        <div>
-          <label>Username:</label>
+    <div className="top">
+      <div className="top2">
+        <form onSubmit={submithandle}>
+          <h2>Signup </h2>
+          <div className="input-box">
+            <label>Username:</label>
+            <Input
+              type="text"
+              value={data.username}
+              onChange={userhandle}
+              name="username"
+            />
+          </div>
+          <div className="input-box">
+            <label>E-mail:</label>
+            <Input
+              type="email"
+              value={data.email}
+              onChange={userhandle}
+              name="email"
+            />
+          </div>
+          <div className="input-box">
+            <label>Password:</label>
+            <br />
+            <Input
+              type="password"
+              value={data.password}
+              onChange={userhandle}
+              name="password"
+            />
+          </div>
+          <div className="input-box">
+            <label>Confirm Password:</label>
+            <br />
+            <Input
+              type="password"
+              value={data.confirm}
+              onChange={userhandle}
+              name="confirm"
+            />
+          </div>
           <br />
-          <Input
-            type="text"
-            value={data.username}
-            onChange={userhandle}
-            name="username"
-            variant="flushed"
-          />
-        </div>
-        <div>
-          <label>E-mail:</label>
-          <br />
-          <Input
-            type="email"
-            value={data.email}
-            onChange={userhandle}
-            name="email"
-            variant="flushed"
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <br />
-          <Input
-            type="password"
-            value={data.password}
-            onChange={userhandle}
-            name="password"
-            variant="flushed"
-          />
-        </div>
-        <div>
-          <label>Confirm Password:</label>
-          <br />
-          <Input
-            type="password"
-            value={data.confirm}
-            onChange={userhandle}
-            name="confirm"
-            variant="flushed"
-          />
-        </div>
-        <br />
-        <Button
-          size="md"
-          height="40px"
-          width="100px"
-          border="2px"
-          borderColor="green.500"
-          type="submit"
-        >
-          Sign up
-        </Button>
-        <p>
-          if you have already an account then{" "}
-          <Link color="teal.500" href="/login">
-            Login
-          </Link>
-        </p>
-        or back to
-        <Link color="teal.500" href="/">
-          Homepage
-        </Link>
-      </form>
+          <Button type="submit">Sign up</Button>
+          <div className="s-link">
+            <p>
+              if you have already an account then <a href="/login">Login</a>
+            </p>
+            <p>
+              or back to
+              <a href="/">Dashboard</a>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

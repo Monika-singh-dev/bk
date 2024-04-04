@@ -6,13 +6,16 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Bookmarkmodel from "./components/Models/Bookmarkmodel";
 import Categorymodel from "./components/Models/Categorymodel";
+import Dashboard from "./components/Dashboard";
 
 function App() {
+  console.log("app");
   return (
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" Component={Homepage} />
+          <Route path="/" exact Component={Dashboard} />
+          <Route path="/homepage" Component={Homepage} />
           <Route path="/signup" Component={Signup} />
           <Route path="/login" Component={Login} />
         </Routes>

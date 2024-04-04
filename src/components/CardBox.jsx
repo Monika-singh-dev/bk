@@ -12,26 +12,24 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { CiEdit } from "react-icons/ci";
-import {
-  removeBookmarkDB,
-  removeCategoryDB,
-  renameCategoryDB,
-  renameBookmarkDB,
-} from "../Firebase/SDK";
+
 import { IoMdDoneAll } from "react-icons/io";
+import { AppStore } from "./context/Storeprovider";
 
 const CardBox = ({ item, user }) => {
+  const { removeBookmark, removeCategory, renameCategory } =
+    useContext(AppStore);
   const [bookmarks, setBookmarks] = useState([]);
   const [ctName, setCtName] = useState(item.name);
   const [isEdit, setIsEdit] = useState(false);
 
-  const removeBookmark = (id) => {
-    removeBookmarkDB({ uid: user.uid, cID: item.id, bID: id });
+  const removeBkHandler = (id) => {
+    removeBookmark({ uid: user.uid, cID: item.id, bID: id });
   };
 
-  const removeCategory = () => {
+  const removeCtHandler = () => {
     if (
       window.confirm(
         `Do you want to delete ${item.name} category! All bookmarks of this category will be deleted.`
@@ -39,7 +37,7 @@ const CardBox = ({ item, user }) => {
     )
       return;
 
-    removeCategoryDB(user.uid, item.id);
+    removeCategory(user.uid, item.id);
     // console.log(item.id);
   };
 
@@ -52,10 +50,10 @@ const CardBox = ({ item, user }) => {
     }));
 
     setBookmarks(dataArr);
-  }, []);
+  }, [item]);
 
-  const renameCategory = () => {
-    renameCategoryDB(user.uid, item.id, ctName);
+  const renameCtHandler = () => {
+    renameCategory(user.uid, item.id, ctName);
 
     setIsEdit(false);
   };
@@ -94,7 +92,7 @@ const CardBox = ({ item, user }) => {
                 color: "#f46a31",
               }}
               fontSize={"20px"}
-              onClick={renameCategory}
+              onClick={renameCtHandler}
             />
           ) : (
             <>
@@ -102,7 +100,7 @@ const CardBox = ({ item, user }) => {
               <MdDelete
                 style={{ marginLeft: "5px", color: "#f46a31" }}
                 fontSize={"20px"}
-                onClick={removeCategory}
+                onClick={removeCtHandler}
               />
             </>
           )}
@@ -114,9 +112,10 @@ const CardBox = ({ item, user }) => {
           {bookmarks.map((bookmark, i) => (
             <SingleBookmark
               key={i}
+              userId={user.uid}
               categoryId={item.id}
               bookmark={bookmark}
-              removeBookmark={removeBookmark}
+              removeBkHandler={removeBkHandler}
             />
           ))}
         </List>
@@ -125,10 +124,17 @@ const CardBox = ({ item, user }) => {
   );
 };
 
-const SingleBookmark = ({ categoryId, bookmark, removeBookmark }) => {
-  const renameBookmark = () => {
-    renameBookmarkDB(categoryId, bookmark.id, "");
+const SingleBookmark = ({ userId, categoryId, bookmark, removeBkHandler }) => {
+  const { renameBookmark } = useContext(AppStore);
+  const [isEdit, setIsEdit] = useState(false);
+  const [title, setTitle] = useState(bookmark?.title);
+
+  const renameBkHandler = () => {
+    renameBookmark(userId, title, categoryId, bookmark.id);
+    setIsEdit(false);
   };
+
+  console.log("single bookmark");
 
   return (
     <ListItem
@@ -140,30 +146,61 @@ const SingleBookmark = ({ categoryId, bookmark, removeBookmark }) => {
       display={"flex"}
       alignItems={"center"}
     >
-      <Link
-        href={bookmark.url}
-        isExternal
-        flex={1}
-        display={"flex"}
-        alignItems={"center"}
-        style={{ textDecoration: "none" }}
-      >
-        <Box w={"12px"} mr={2} ml={2} mt={0.5}>
-          <img src={bookmark.icon} alt="icon" height={"100%"} width={"100%"} />
-        </Box>
-        <Text fontSize={"sm"}>{bookmark.title}</Text>
-        <Spacer />
-      </Link>
+      {isEdit ? (
+        <>
+          <Input
+            variant="flushed"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Please type new name!"
+            zIndex={10}
+            borderBottom="2px solid black"
+          />
 
-      <CiEdit fontSize={"18px"} />
-      <Box
-        mr={2}
-        ml={2}
-        cursor={"pointer"}
-        onClick={() => removeBookmark(bookmark.id)}
-      >
-        <MdDelete />
-      </Box>
+          <IoMdDoneAll
+            style={{
+              marginLeft: "10px",
+              marginRight: "8px",
+              color: "#f46a31",
+            }}
+            fontSize={"20px"}
+            onClick={renameBkHandler}
+          />
+        </>
+      ) : (
+        <>
+          <Link
+            href={bookmark.url}
+            isExternal
+            flex={1}
+            display={"flex"}
+            alignItems={"center"}
+            style={{ textDecoration: "none" }}
+          >
+            <Box w={"12px"} mr={2} ml={2} mt={0.5}>
+              <img
+                src={bookmark.icon}
+                alt="icon"
+                height={"100%"}
+                width={"100%"}
+              />
+            </Box>
+
+            <Text fontSize={"sm"}>{bookmark.title}</Text>
+
+            <Spacer />
+          </Link>
+          <CiEdit fontSize={"18px"} onClick={() => setIsEdit(true)} />
+          <Box
+            mr={2}
+            ml={2}
+            cursor={"pointer"}
+            onClick={() => removeBkHandler(bookmark.id)}
+          >
+            <MdDelete />
+          </Box>{" "}
+        </>
+      )}
     </ListItem>
   );
 };

@@ -10,7 +10,7 @@ import {
   push,
   ref,
   remove,
-  set,7
+  set,
   update,
 } from "firebase/database";
 
@@ -73,24 +73,23 @@ export async function addUserDB(uid, email) {
   });
 }
 
-export function addCategoryDB(uid, value) {
-  const id = push(child(ref(db), objName)).key;
+export async function getNewCategoryID() {
+  return push(child(ref(db), objName)).key;
+}
 
+export function addCategoryDB(id, uid, value) {
   set(ref(db, `${uid}/${objName}/${id}`), {
     name: value,
   });
-
-  return id;
+}
+export async function getNewBookmarkID(uid, item) {
+  return push(child(ref(db), `${uid}/${objName}/${item.categoryId}`)).key;
 }
 
-export function addBookmarkDB(uid, item) {
-  const id = push(child(ref(db), `${uid}/${objName}/${item.categoryId}`)).key;
-
+export async function addBookmarkDB(id, uid, item) {
   const updates = {};
   updates[`${uid}/${objName}/${item.categoryId}/bookmarks/${id}`] = item;
   update(ref(db), updates);
-
-  return id;
 }
 
 export function removeBookmarkDB({ uid, cID, bID }) {

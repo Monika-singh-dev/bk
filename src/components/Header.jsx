@@ -10,6 +10,7 @@ const Header = () => {
   const handleLogOut = () => {
     if (window.confirm(`Do you want to logout?`) !== true) return;
     handleUser(null);
+    window.location.href = "/";
   };
 
   return (

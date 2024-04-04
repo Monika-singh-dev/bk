@@ -6,14 +6,16 @@ import CardBox from "./CardBox";
 import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { items, user } = useContext(AppStore);
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, []);
+  console.log("homepage");
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   }
+  // }, []);
 
   return (
     <div>

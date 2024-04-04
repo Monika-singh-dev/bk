@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../Firebase/SDK";
 import { AppStore } from "./context/Storeprovider";
-import { Button, Input, Link } from "@chakra-ui/react";
+import { Button, Input } from "@chakra-ui/react";
+import "./forms.css";
 function Login() {
   const navigate = useNavigate();
   const { handleUser, user } = useContext(AppStore);
@@ -13,12 +14,16 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
+    // alert("");
     e.preventDefault();
+
     if (data.email.trim() === "" || data.password.trim() === "") {
       alert("plzz fill the all inputs");
     }
 
     const user = await signIn(data.email, data.password);
+
+    console.log(user);
 
     if (!user) {
       alert("something went wrong!");
@@ -27,68 +32,59 @@ function Login() {
 
     handleUser(user);
     localStorage.setItem("bookmarkUser", JSON.stringify(user));
-    navigate("/");
 
     setData({ email: "", password: "" });
+    // window.location.href = "/homepage";
+    navigate("/homepage");
+    // alert("");
+    // console.log("object");
   };
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
+  console.log("login");
+
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/");
+  //   }
+  // }, [user]);
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <h6>Login Form</h6>
-        <div>
-          <label>Email:</label>
+    <div className="top">
+      <div className="top2">
+        <form onSubmit={handleSubmit}>
+          <h2>Login</h2>
+          <div className="input-box">
+            <label>Email:</label>
+            <Input
+              type="email"
+              value={data.email}
+              onChange={handleChange}
+              name="email"
+            />
+          </div>
+          <div className="input-box">
+            <label>Password:</label>
+            <br />
+            <Input
+              type="password"
+              value={data.password}
+              onChange={handleChange}
+              name="password"
+            />
+          </div>
           <br />
-          <Input
-            type="email"
-            value={data.email}
-            onChange={handleChange}
-            name="email"
-            variant="flushed"
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <br />
-          <Input
-            type="password"
-            value={data.password}
-            onChange={handleChange}
-            name="password"
-            variant="flushed"
-          />
-        </div>
-        <br />
-        <Button
-          size="md"
-          height="30px"
-          width="90px"
-          border="2px"
-          borderColor="green.500"
-          type="submit"
-        >
-          login
-        </Button>
-        <p>
-          don't have an account then{" "}
-          <Link color="teal.500" href="/signup">
-            Signup
-          </Link>
-        </p>
-        or
-        <p>
-          {" "}
-          back to{" "}
-          <Link color="teal.500" href="/">
-            Homepage
-          </Link>
-        </p>
-      </form>
+          <Button type="submit">login</Button>
+          <div className="s-link">
+            <p>
+              don't have an account ?<a href="/signup">Signup</a>
+            </p>
+            or
+            <p>
+              back to
+              <a href="/">Dashboard</a>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
