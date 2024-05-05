@@ -5,7 +5,7 @@
     width: 100vw;
 } */
 
-  .icon{
+  .ico{
     height: 150px;
     width: 150px;
     color: rgb(5, 5, 54);
@@ -14,12 +14,12 @@
    
   
   }
-  h1{
+  .heading{
     font-family: Helvetica, Arial, sans-serif;
     font-size: 50px;
     color: solid black; 
   }
-  .b{
+  .buttonstyle{
     padding: 15px 25px;
     border: unset;
     
@@ -37,7 +37,7 @@
     margin-right: 10px;
    }
    
-   .b::before {
+   .buttonstyle::before {
     content: "";
     position: absolute;
     top: 0;
@@ -52,10 +52,10 @@
     transition: all 250ms
    }
    
-   .b:hover {
+   .buttonstyle:hover {
     color: #e8e8e8;
    }
    
-   .b:hover::before {
+   .buttonstyle:hover::before {
     width: 100%;
    }

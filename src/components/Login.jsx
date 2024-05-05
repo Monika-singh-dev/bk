@@ -52,7 +52,7 @@ function Login() {
       <div className="top2">
         <form onSubmit={handleSubmit}>
           <h2>Login</h2>
-          <div className="input-box">
+          <div className="ib">
             <label>Email:</label>
             <Input
               type="email"
@@ -61,7 +61,7 @@ function Login() {
               name="email"
             />
           </div>
-          <div className="input-box">
+          <div className="ib">
             <label>Password:</label>
             <br />
             <Input
@@ -73,7 +73,7 @@ function Login() {
           </div>
           <br />
           <Button type="submit">login</Button>
-          <div className="s-link">
+          <div className="link-deco">
             <p>
               don't have an account ?<a href="/signup">Signup</a>
             </p>

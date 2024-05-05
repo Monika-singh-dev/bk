@@ -70,7 +70,7 @@ const Signup = () => {
               name="username"
             />
           </div> */}
-          <div className="input-box">
+          <div className="ib">
             <label>E-mail:</label>
             <Input
               type="email"
@@ -79,7 +79,7 @@ const Signup = () => {
               name="email"
             />
           </div>
-          <div className="input-box">
+          <div className="ib">
             <label>Password:</label>
             <br />
             <Input
@@ -89,7 +89,7 @@ const Signup = () => {
               name="password"
             />
           </div>
-          <div className="input-box">
+          <div className="ib">
             <label>Confirm Password:</label>
             <br />
             <Input
@@ -101,7 +101,7 @@ const Signup = () => {
           </div>
           <br />
           <Button type="submit">Sign up</Button>
-          <div className="s-link">
+          <div className="link-deco">
             <p>
               if you have already an account then <a href="/login">Login</a>
             </p>

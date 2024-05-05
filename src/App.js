@@ -15,9 +15,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" exact Component={Dashboard} />
-          <Route path="/homepage" Component={Homepage} />
           <Route path="/signup" Component={Signup} />
           <Route path="/login" Component={Login} />
+          <Route path="/homepage" Component={Homepage} />
         </Routes>
       </BrowserRouter>
 
