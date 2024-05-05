@@ -12,7 +12,7 @@ import {
 import React, { useContext, useState } from "react";
 import { Appactions } from "../context/Actionprovider";
 import { AppStore } from "../context/Storeprovider";
-function Categorymodel() {
+const Categorymodel = () => {
   const { isCmOpen, cmModelHandler } = useContext(Appactions);
   const { addcategory } = useContext(AppStore);
   const [input, setInput] = useState("");
@@ -61,6 +61,6 @@ function Categorymodel() {
       </Modal>
     </>
   );
-}
+};
 
 export default Categorymodel;

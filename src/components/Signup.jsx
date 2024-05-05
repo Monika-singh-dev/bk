@@ -61,7 +61,7 @@ const Signup = () => {
       <div className="top2">
         <form onSubmit={submithandle}>
           <h2>Signup </h2>
-          <div className="input-box">
+          {/* <div className="input-box">
             <label>Username:</label>
             <Input
               type="text"
@@ -69,7 +69,7 @@ const Signup = () => {
               onChange={userhandle}
               name="username"
             />
-          </div>
+          </div> */}
           <div className="input-box">
             <label>E-mail:</label>
             <Input
